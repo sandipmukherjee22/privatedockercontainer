@@ -1,0 +1,27 @@
+version: '3'
+services:
+
+  nginx-proxy-ip:
+    networks:
+      - no-internet
+      - internet
+    image: nginx:stable
+    volumes:
+      - ./nginx_proxy_ip.conf:/etc/nginx/nginx.conf
+      - ./ssl-conf:/etc/nginx/ssl-conf
+    restart: always
+
+
+##### Protected section
+
+  protected-container:
+    networks:
+      - no-internet
+    links:
+      - nginx-proxy-ip:107.22.150.221
+    image: nginx:stable
+
+networks:
+  internet: {}
+  no-internet:
+    internal: true
